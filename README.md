@@ -40,7 +40,7 @@ $ python3 VerilogPDA.py [path-to-input]
 For example, assuming that a circuit called `abs_diff_i4_o3.v` is located at the root directory, one can get the area, power, and delay reports of this circuit using the following command: 
 
 ```
-$ python3 VerilogPDA.py [path-to-input]
+$ python3 VerilogPDA.py abs_diff_i4_o3.v
 ```
 Upon launching the command above, three report files will be generated in `./VerilogPDA.py.report/` directory. 
 

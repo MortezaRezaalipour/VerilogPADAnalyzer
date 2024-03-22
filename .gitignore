@@ -1,7 +1,8 @@
 VerilogPDA.py.report/
 VerilogPDA.py.temp/
 input/
-*.py
+src/__pycache__
+
 
 !config
 !src
