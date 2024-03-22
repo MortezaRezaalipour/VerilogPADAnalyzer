@@ -1,0 +1,8 @@
+VerilogPDA.py.report/
+VerilogPDA.py.temp/
+input/
+*.py
+
+!config
+!src
+!VerilogPDA.py
