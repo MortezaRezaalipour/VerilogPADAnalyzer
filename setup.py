@@ -15,10 +15,11 @@ setup(
     version=VERSION,
     author="Morteza Rezaalipour (MorellRAP)",
     author_email="<rezaalipour.usi@gmail.com>",
-    description=DESCRIPTION,
+    description='A library for Power, Area, and Delay analysis',
+    long_description=DESCRIPTION,
     url = "https://github.com/MortezaRezaalipour/VerilogPADAnalyzer",
     packages=find_packages(),
-    install_requires=[],
+    install_requires=[''],
     keywords=['python', 'verilog', 'PAD', 'synthesis', 'analysis', 'circuit', 'EDA', 'simulation', 'hardware', 'design'],
     classifiers=[
         "Development Status :: 4 - Beta",
