@@ -5,9 +5,7 @@ import os
 from .paths import OPENSTA, YOSYS, ABC_SCRIPT_PATH, DEFAULT_LIB
 
 class Synthesis:
-
     def __init__(self, input_path: str, temp_dir: str = None, report_dir: str = None):
-        self._name = None
         self._input_path = input_path
         self._module_name = self.__get_module_name()
         self._temp_dir = f'{temp_dir}' if temp_dir else 'temp'
@@ -18,9 +16,9 @@ class Synthesis:
         self._power_script = f'{self._temp_dir}/{self._module_name}_power.script'
         self._delay_script = f'{self._temp_dir}/{self._module_name}_delay.script'
 
-        self._area = self.get_area()
-        self._power = self.get_power()
-        self._delay = self.get_delay()
+        self._area = None
+        self._power = None
+        self._delay = None
 
     # =========================
     def get_area(self) -> float:
@@ -51,6 +49,7 @@ class Synthesis:
 
         with open(f'{self._rep_dir}/{self._module_name}.area', 'w') as a:
             a.write(f'{float(area)}\n')
+            self._area = float(area)
         return float(area)
 
     def get_power(self):
@@ -98,12 +97,14 @@ class Synthesis:
                 with open(f'{self._rep_dir}/{self._module_name}.power', 'w') as a:
                     a.write(f'{float(total_power)}\n')
 
+                self._power = float(total_power)
                 return float(total_power)
 
             else:
                 print('OpenSTA Warning! Design has 0 power consumption!')
                 with open(f'{self._rep_dir}/{self._module_name}.power', 'w') as a:
                     a.write(f'{float(0)}\n')
+                self._power = float(0)
                 return 0
 
 
@@ -134,16 +135,23 @@ class Synthesis:
                 time = re.search('(\d+.\d+).*data arrival time', process.stdout.decode()).group(1)
                 with open(f'{self._rep_dir}/{self._module_name}.delay', 'w') as a:
                     a.write(f'{float(time)}\n')
-
+                self._delay = float(time)
                 return float(time)
             else:
                 print('OpenSTA Warning! Design has 0 delay!')
                 with open(f'{self._rep_dir}/{self._module_name}.delay', 'w') as a:
                     a.write(f'{float(0)}\n')
+                self._delay = float(0)
                 return 0
 
 
     def __synthesize(self):
+        """
+        reads the Verilog file located by self._input_path property and synthesizes it into gate level according to
+        tech. library located at "DEFAULT_LIB" and according to the script located at "ABC_SCRIPT_PATH" and dumps the
+        synthesized netlist onto "self._syn_path"
+        :return: nothing
+        """
 
         yosys_command = f"read_verilog {self._input_path};\n" \
                         f"synth -flatten;\n" \
@@ -156,6 +164,18 @@ class Synthesis:
             raise Exception(f'Yosys ERROR!!!\n {process.stderr.decode()}')
 
     def __get_module_name(self):
+        """
+        reads the Verilog file located at "self._input_path", parses the module signature and extract the module's name
+        Example:
+        imaging the module signature of a Verilog file is as such:
+
+        module adder_i4_o3(i0, i1, i2, i3, o0, o1, o2);
+        ... the rest of the code
+        endmodule;
+
+        in this case, this function returns "adder_i4_o3"
+        :return: a str that contains the module's name
+        """
         with open(self._input_path, 'r') as dp:
             contents = dp.readlines()
             for line in contents:
@@ -165,22 +185,43 @@ class Synthesis:
         return modulename
 
     # =========================
-    # TODO: create static methods for PYPI package
+    """
+    For use as a PyPI package
+    """
     @classmethod
-    def area(cls):
-        pass
+    def area(cls, input_path: str, temp_dir: str = None, report_dir: str = None):
+        """
+        measures the area with yosys synthesis tool with the tech. library specified
+        :return: a float number representing the area
+        """
+        synth_obj = Synthesis(input_path, temp_dir, report_dir)
+        synth_obj._area = synth_obj.get_area()
 
     @classmethod
-    def power(cls):
-        pass
+    def power(cls, input_path: str, temp_dir: str = None, report_dir: str = None):
+        """
+        measures the power with opensta synthesis tool with the tech. library specified
+        :return: a float number representing the power
+        """
+        synth_obj = Synthesis(input_path, temp_dir, report_dir)
+        synth_obj._area = synth_obj.get_power()
 
     @classmethod
-    def delay(cls):
-        pass
+    def delay(cls, input_path: str, temp_dir: str = None, report_dir: str = None):
+        """
+        measures the delay with opensta synthesis tool with the tech. library specified
+        :return: a float number representing the delay
+        """
+        synth_obj = Synthesis(input_path, temp_dir, report_dir)
+        synth_obj._area = synth_obj.get_delay()
     # =========================
 
     def __repr__(self):
         return f'An object of class Synthesis:\n' \
-               f'{self.benchmark_name = }\n' \
-               f'{self.graph = }\n' \
-               f'{self.json_model = }\n'
+            f'{self._module_name = }\n' \
+            f'{self._input_path = }\n' \
+            f'{self._area = }\n' \
+            f'{self._power = }\n' \
+            f'{self._delay = }\n'
+
+
