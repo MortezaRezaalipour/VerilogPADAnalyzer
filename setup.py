@@ -8,6 +8,10 @@ VerilogPADAnalyzer is a Python application designed to analyze and report the
 Power, Area, and Delay (PAD) of Verilog input circuits.
 """
 
+# read the contents of your README file
+from pathlib import Path
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 # Setting up
 setup(
@@ -15,8 +19,9 @@ setup(
     version=VERSION,
     author="Morteza Rezaalipour (MorellRAP)",
     author_email="<rezaalipour.usi@gmail.com>",
-    description='A library for Power, Area, and Delay analysis',
-    long_description=DESCRIPTION,
+    description=DESCRIPTION,
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     url = "https://github.com/MortezaRezaalipour/VerilogPADAnalyzer",
     packages=find_packages(),
     install_requires=[''],
