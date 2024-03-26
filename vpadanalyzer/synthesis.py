@@ -3,7 +3,7 @@ import subprocess
 from subprocess import PIPE
 import os
 from . import config
-from .paths import OPENSTA, YOSYS, ABC_SCRIPT_PATH, DEFAULT_LIB
+from .paths import OPENSTA, YOSYS
 
 class Synthesis:
     def __init__(self, input_path: str, temp_dir: str = None, report_dir: str = None):
