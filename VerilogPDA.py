@@ -1,7 +1,7 @@
 import sys
 import os
-from src.arguments import Arguments
-from src.synthesis import Synthesis
+from vpadanalyzer.arguments import Arguments
+from vpadanalyzer.synthesis import Synthesis
 
 
 def VerilogPAD():
