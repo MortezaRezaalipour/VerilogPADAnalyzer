@@ -2,6 +2,7 @@ import re
 import subprocess
 from subprocess import PIPE
 import os
+from . import config
 from .paths import OPENSTA, YOSYS, ABC_SCRIPT_PATH, DEFAULT_LIB
 
 class Synthesis:
@@ -20,7 +21,17 @@ class Synthesis:
         self._power = None
         self._delay = None
 
+        self._config_path = self.get_config_path()
+        self._lib_path = f'{self._config_path}/gscl45nm.lib'
+        self._abc_script_path = f'{self._config_path}/abc.script'
+
+
     # =========================
+
+    def get_config_path(self):
+        init_address = os.path.abspath(config.__file__)
+        init_address = init_address.replace('__init__.py', "")
+        return init_address
     def get_area(self) -> float:
         """
         measures the area with yosys synthesis tool with the tech. library specified
@@ -30,8 +41,8 @@ class Synthesis:
                         f"synth -flatten;\n" \
                         f"opt;\n" \
                         f"opt_clean -purge;\n" \
-                        f"abc -liberty {DEFAULT_LIB} -script {ABC_SCRIPT_PATH};\n" \
-                        f"stat -liberty {DEFAULT_LIB};\n"
+                        f"abc -liberty {self._lib_path} -script {self._abc_script_path};\n" \
+                        f"stat -liberty {self._lib_path};\n"
 
         process = subprocess.run([YOSYS, '-p', yosys_command], stdout=PIPE, stderr=PIPE)
         if process.stderr:
@@ -59,7 +70,7 @@ class Synthesis:
         """
         self.__synthesize()
 
-        sta_command = f"read_liberty {DEFAULT_LIB}\n" \
+        sta_command = f"read_liberty {self._lib_path}\n" \
                       f"read_verilog {self._syn_path}\n" \
                       f"link_design {self._module_name}\n" \
                       f"create_clock -name clk -period 1\n" \
@@ -115,7 +126,7 @@ class Synthesis:
         """
         self.__synthesize()
 
-        sta_command = f"read_liberty {DEFAULT_LIB}\n" \
+        sta_command = f"read_liberty {self._lib_path}\n" \
                       f"read_verilog {self._syn_path}\n" \
                       f"link_design {self._module_name}\n" \
                       f"create_clock -name clk -period 1\n" \
@@ -157,7 +168,7 @@ class Synthesis:
                         f"synth -flatten;\n" \
                         f"opt;\n" \
                         f"opt_clean -purge;\n" \
-                        f"abc -liberty {DEFAULT_LIB} -script {ABC_SCRIPT_PATH};\n" \
+                        f"abc -liberty {self._lib_path} -script {self._abc_script_path};\n" \
                         f"write_verilog -noattr {self._syn_path}"
         process = subprocess.run([YOSYS, '-p', yosys_command], stdout=PIPE, stderr=PIPE)
         if process.stderr:
