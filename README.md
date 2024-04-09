@@ -1,7 +1,8 @@
-# VerilogPAD
+# VerilogPADAnalyzer
 
 VerilogPAD is Python tool designed to analyze Verilog files, providing power, area, and delay metrics.
-
+It is also released as a PyPi package under the name `verilog-pad-analyzer` (https://pypi.org/project/verilog-pad-analyzer/). 
+You may simply import it into your Python project by installing this package witht the command `pip install verilog-pad-analyzer`
 
 
 ## Prerequisits
