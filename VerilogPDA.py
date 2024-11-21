@@ -15,10 +15,10 @@ def VerilogPAD():
     syn_obj = Synthesis(args.input_path, f'{sys.argv[0]}.temp', f'{sys.argv[0]}.report')
 
     # To use as an external library
-    Synthesis.area(args.input_path, f'{sys.argv[0]}.temp', f'{sys.argv[0]}.report')
+    area = Synthesis.area(args.input_path, f'{sys.argv[0]}.temp', f'{sys.argv[0]}.report')
     Synthesis.delay(args.input_path, f'{sys.argv[0]}.temp', f'{sys.argv[0]}.report')
     Synthesis.power(args.input_path, f'{sys.argv[0]}.temp', f'{sys.argv[0]}.report')
-
+    print(area)
 
 if __name__ == "__main__":
     VerilogPAD()

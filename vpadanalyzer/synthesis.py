@@ -207,7 +207,7 @@ class Synthesis:
         """
         synth_obj = Synthesis(input_path, temp_dir, report_dir)
         synth_obj._area = synth_obj.get_area()
-
+        return synth_obj._area
     @classmethod
     def power(cls, input_path: str, temp_dir: str = None, report_dir: str = None):
         """
@@ -215,7 +215,8 @@ class Synthesis:
         :return: a float number representing the power
         """
         synth_obj = Synthesis(input_path, temp_dir, report_dir)
-        synth_obj._area = synth_obj.get_power()
+        synth_obj._power = synth_obj.get_power()
+        return synth_obj._power
 
     @classmethod
     def delay(cls, input_path: str, temp_dir: str = None, report_dir: str = None):
@@ -224,7 +225,8 @@ class Synthesis:
         :return: a float number representing the delay
         """
         synth_obj = Synthesis(input_path, temp_dir, report_dir)
-        synth_obj._area = synth_obj.get_delay()
+        synth_obj._delay = synth_obj.get_delay()
+        return  synth_obj._delay
     # =========================
 
     def __repr__(self):
