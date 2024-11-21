@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 import os
 
 
-VERSION = '0.0.6'
+VERSION = '0.0.7'
 DESCRIPTION = """
 VerilogPADAnalyzer is a Python application designed to analyze and report the
 Power, Area, and Delay (PAD) of Verilog input circuits.
